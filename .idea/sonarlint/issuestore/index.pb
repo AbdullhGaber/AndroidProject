@@ -1,12 +1,6 @@
 
 X
 (gradle/wrapper/gradle-wrapper.properties,f\b\fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
-s
-Capp/src/main/java/com/example/travelapplication/SignUpActivity.java,6\7\675496da726ef8586f6e2417b5e97484e9ce1bd0
-y
-Iapp/src/main/java/com/example/travelapplication/ui/home/HomeFragment.java,8\9\89b9b8a0456ef1945ef8803515fa2456fbe1cec4
-z
-Japp/src/main/java/com/example/travelapplication/ui/home/HomeViewModel.java,3\b\3b3821622c43b9f1e8e0826b4cf29980057e79be
 „
 Tapp/src/main/java/com/example/travelapplication/ui/slideshow/SlideshowViewModel.java,6\3\63e2c7579a3466b27d292c2b2ef985011b3f1bf2
 ƒ
