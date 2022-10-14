@@ -9,5 +9,9 @@ Sapp/src/main/java/com/example/travelapplication/ui/slideshow/SlideshowFragment.
 Papp/src/main/java/com/example/travelapplication/ui/gallery/GalleryViewModel.java,3\d\3de8c1b4bdcb430a39387adecfcd24e62644f018
 
 Oapp/src/main/java/com/example/travelapplication/ui/gallery/GalleryFragment.java,9\5\95e9adb1258844b13898f3a9794c7baeca3ef80d
-@
-app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
+q
+Aapp/src/main/java/com/example/travelapplication/MainActivity.java,3\8\38fcbce17a6465a0a8cdba5ea201aa6268baa2de
+s
+Capp/src/main/java/com/example/travelapplication/SignUpActivity.java,6\7\675496da726ef8586f6e2417b5e97484e9ce1bd0
+t
+Dapp/src/main/java/com/example/travelapplication/NewTripActivity.java,b\4\b4245953cb7eab0ff70a1b55e1dece1d74ab223e

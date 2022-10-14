@@ -8,6 +8,9 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.airbnb.lottie.LottieComposition;
+import com.airbnb.lottie.LottieDrawable;
+
 public class SplashActivity extends AppCompatActivity {
 
     public static final String EMAIL = "email";
@@ -16,7 +19,7 @@ public class SplashActivity extends AppCompatActivity {
     SharedPreferences mSharedPreferences;
 
     /** Duration of wait **/
-    private static final int SPLASH_DISPLAY_LENGTH = 1000;
+    private static final int SPLASH_DISPLAY_LENGTH = 5000;
    
 
     @Override
