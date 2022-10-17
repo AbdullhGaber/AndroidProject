@@ -1,58 +1,45 @@
 package com.example.travelapplication;
 
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.os.Bundle;
 import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.airbnb.lottie.LottieComposition;
-import com.airbnb.lottie.LottieDrawable;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashActivity extends AppCompatActivity {
 
-    public static final String EMAIL = "email";
-    public static final String PASSWORD = "password";
+    private static final int SPLASH_DISPLAY_LENGTH = 3000;
 
-    SharedPreferences mSharedPreferences;
+    private FirebaseAuth mAuth;
 
-    /** Duration of wait **/
-    private static final int SPLASH_DISPLAY_LENGTH = 5000;
-   
+    private Intent mIntent;
+
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_splash);
-        SharedPreferences.Editor editor = getEditor();
-        setSharedPreferencesValues(editor);
 
+        mAuth = FirebaseAuth.getInstance();
 
         /* New Handler to start the Activity
          * and close this Splash-Screen after some seconds.*/
         new Handler().postDelayed(() -> {
-            Intent intent ;
-            if("user@example.com".equals(mSharedPreferences.getString(EMAIL, EMAIL)) &&
-               "123123".equals(mSharedPreferences.getString(PASSWORD, PASSWORD)))
-                intent = new Intent(SplashActivity.this, DrawerActivity.class);
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+
+            if(currentUser == null)
+                mIntent = new Intent(SplashActivity.this, DrawerActivity.class);
             else
-                intent = new Intent(SplashActivity.this, MainActivity.class);
+                mIntent = new Intent(SplashActivity.this, LoginActivity.class);
 
-            startActivity(intent);
+            startActivity(mIntent);
+
         }, SPLASH_DISPLAY_LENGTH);
-    }
-
-    private void setSharedPreferencesValues(SharedPreferences.Editor editor) {
-        editor.putString(EMAIL,"user@example.com");
-        editor.putString(PASSWORD, "123123");
-        editor.apply();
-    }
-
-    private SharedPreferences.Editor getEditor() {
-        mSharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        return mSharedPreferences.edit();
     }
 
 }
