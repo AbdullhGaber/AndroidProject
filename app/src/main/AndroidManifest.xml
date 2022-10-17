@@ -8,9 +8,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TravelApplication">
+
         <activity
             android:name=".SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/FullScreen">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -21,7 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".NewTripActivity"
             android:exported="false">
@@ -31,14 +32,12 @@
         </activity>
         <activity
             android:name=".DrawerActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/title_activity_drawer"
             android:theme="@style/Theme.TravelApplication.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
-
         </activity>
         <activity
             android:name=".SignUpActivity"
@@ -48,8 +47,12 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:name=".LoginActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

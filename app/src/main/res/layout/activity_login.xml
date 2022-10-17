@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="100"
-    tools:context=".MainActivity">
+    tools:context=".LoginActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -76,7 +76,7 @@
             android:importantForAutofill="no" />
 
         <Button
-            android:id="@+id/signInButton"
+            android:id="@+id/login_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -91,7 +91,7 @@
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView
-            android:id="@+id/noAccountText"
+            android:id="@+id/no_account_text"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="56dp"
@@ -99,7 +99,7 @@
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/design_default_color_primary_dark"
-            app:layout_constraintTop_toBottomOf="@+id/signInButton"
+            app:layout_constraintTop_toBottomOf="@+id/login_button"
             tools:layout_editor_absoluteX="0dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
