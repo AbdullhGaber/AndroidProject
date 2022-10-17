@@ -9,9 +9,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TravelApplication">
         <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".SplashActivity"
-            android:theme="@style/FullScreen"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/FullScreen">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -22,7 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".NewTripActivity"
             android:exported="false">
@@ -38,8 +44,6 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
-
         </activity>
         <activity
             android:name=".SignUpActivity"

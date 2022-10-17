@@ -41,4 +41,7 @@
     <string name="trip_return_time">Trip Return Time</string>
     <string name="start">start</string>
     <string name="tripia">Tripia</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="reset">Reset</string>
+    <string name="return_to_login">Return to Login</string>
 </resources>

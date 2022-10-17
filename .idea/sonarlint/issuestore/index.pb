@@ -15,3 +15,5 @@ s
 Capp/src/main/java/com/example/travelapplication/SignUpActivity.java,6\7\675496da726ef8586f6e2417b5e97484e9ce1bd0
 t
 Dapp/src/main/java/com/example/travelapplication/NewTripActivity.java,b\4\b4245953cb7eab0ff70a1b55e1dece1d74ab223e
+@
+app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
