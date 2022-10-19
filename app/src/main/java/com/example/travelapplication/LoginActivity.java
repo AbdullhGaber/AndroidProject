@@ -2,6 +2,7 @@ package com.example.travelapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.google.firebase.storage.StorageReference;
 
 import android.util.Log;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
@@ -85,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success");
+                        FireStoreUtil.getUserDocument(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(),getApplicationContext());
                         writeToSharedPreferences();
                         Toast.makeText(LoginActivity.this, "Authentication success.",
                                 Toast.LENGTH_SHORT).show();
@@ -100,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+
     private void writeToSharedPreferences() {
         StorageReference gsReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://tripapplication-b1b72.appspot.com/");
         gsReference.child("uploads/" +
@@ -110,8 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnSuccessListener(uri -> SpUtil.writeStringPref(getApplicationContext(), SpUtil.USER_PHOTO, uri.toString()));
 
         SpUtil.writeStringPref(getApplicationContext(),SpUtil.USER_EMAIL, mEmail);
-        //SpUtil.writeStringPref(getApplicationContext(),SpUtil.USER_NAME, Objects.requireNonNull(FireStoreUtil.getUserDocument(FirebaseAuth.getInstance().getCurrentUser().getUid()).get("username")).toString());
-       // SpUtil.writeStringPref(getApplicationContext(),SpUtil.USER_PHONE, Objects.requireNonNull(FireStoreUtil.getUserDocument(FirebaseAuth.getInstance().getCurrentUser().getUid()).get("userphone")).toString());
+
 
     }
 }

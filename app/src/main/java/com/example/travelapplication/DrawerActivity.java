@@ -1,6 +1,7 @@
 package com.example.travelapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -54,6 +55,7 @@ public class DrawerActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
         initializeComponents();
         setComponentsValues();
+        SpUtil.getPref(this).registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> setComponentsValues());
 
     }
 

@@ -202,7 +202,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    private void dismissWithTry(ProgressDialog pd) {
+    public static void dismissWithTry(ProgressDialog pd) {
 
         try {
             pd.dismiss();

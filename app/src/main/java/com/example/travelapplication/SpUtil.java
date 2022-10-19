@@ -21,8 +21,6 @@ public class SpUtil {
         return getPref(context).getString(key,"");
     }
 
-
-
     public static void writeStringPref(Context context, String key, String value){
         SharedPreferences.Editor editor = getPref(context).edit();
         editor.putString(key,value);
