@@ -1,15 +1,23 @@
 package com.example.travelapplication;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import android.util.Log;
+
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -38,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         clickListeners();
 
     }
+
     private void initializeComponents() {
         mAuth = FirebaseAuth.getInstance();
         mEmailText = findViewById(R.id.email_text);
@@ -58,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void noAccountText() {
         mNoAccountText.setOnClickListener(view -> {
-            mIntent = new Intent(LoginActivity.this , SignUpActivity.class);
+            mIntent = new Intent(LoginActivity.this, SignUpActivity.class);
             startActivity(mIntent);
         });
     }
@@ -76,9 +85,10 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success");
+                        writeToSharedPreferences();
                         Toast.makeText(LoginActivity.this, "Authentication success.",
                                 Toast.LENGTH_SHORT).show();
-                        mIntent = new Intent(LoginActivity.this,DrawerActivity.class);
+                        mIntent = new Intent(LoginActivity.this, DrawerActivity.class);
                         startActivity(mIntent);
                         finish();
                     } else {
@@ -88,5 +98,20 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void writeToSharedPreferences() {
+        StorageReference gsReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://tripapplication-b1b72.appspot.com/");
+        gsReference.child("uploads/" +
+                        Objects
+                                .requireNonNull(FirebaseAuth.getInstance().getCurrentUser())
+                                .getUid())
+                .getDownloadUrl()
+                .addOnSuccessListener(uri -> SpUtil.writeStringPref(getApplicationContext(), SpUtil.USER_PHOTO, uri.toString()));
+
+        SpUtil.writeStringPref(getApplicationContext(),SpUtil.USER_EMAIL, mEmail);
+        //SpUtil.writeStringPref(getApplicationContext(),SpUtil.USER_NAME, Objects.requireNonNull(FireStoreUtil.getUserDocument(FirebaseAuth.getInstance().getCurrentUser().getUid()).get("username")).toString());
+       // SpUtil.writeStringPref(getApplicationContext(),SpUtil.USER_PHONE, Objects.requireNonNull(FireStoreUtil.getUserDocument(FirebaseAuth.getInstance().getCurrentUser().getUid()).get("userphone")).toString());
+
     }
 }

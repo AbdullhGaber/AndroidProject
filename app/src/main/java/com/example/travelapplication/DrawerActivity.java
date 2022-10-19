@@ -54,7 +54,10 @@ public class DrawerActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
         initializeComponents();
         setComponentsValues();
+
     }
+
+
 
     private void initializeComponents() {
         View header = navigationView.getHeaderView(0);

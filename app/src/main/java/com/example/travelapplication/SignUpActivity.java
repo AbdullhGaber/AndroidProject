@@ -141,6 +141,7 @@ public class SignUpActivity extends AppCompatActivity {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signUpWithEmail:success");
                         uploadImage(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+                        FireStoreUtil.addUserCollection(mUser,mPhone,Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
                         writeDataToSharedPref();
                         Toast.makeText(SignUpActivity.this, "Authentication success.", Toast.LENGTH_SHORT).show();
                         mIntent = new Intent(SignUpActivity.this,DrawerActivity.class);
