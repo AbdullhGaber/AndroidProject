@@ -9,7 +9,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:weightSum="100"
         tools:context=".LoginActivity">
 
@@ -67,7 +67,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tvNewAccount"
                 android:layout_width="173dp"
                 android:layout_height="81dp"
                 android:layout_marginStart="16dp"
@@ -79,7 +79,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_image"
+                android:id="@+id/nav_header_profile"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
                 android:layout_marginStart="96dp"
@@ -89,20 +89,20 @@
                 app:civ_border_width="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/textView2"
+                app:layout_constraintStart_toEndOf="@+id/tvNewAccount"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tvUploadPic"
                 android:layout_width="109dp"
                 android:layout_height="44dp"
                 android:layout_marginTop="12dp"
                 android:text="@string/upload_you_profile_picture"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="@+id/profile_image"
+                app:layout_constraintEnd_toEndOf="@+id/nav_header_profile"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/profile_image"
-                app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+                app:layout_constraintStart_toStartOf="@+id/nav_header_profile"
+                app:layout_constraintTop_toBottomOf="@+id/nav_header_profile" />
 
             <EditText
                 android:id="@+id/user_name_edit"

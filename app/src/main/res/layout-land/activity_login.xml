@@ -47,7 +47,7 @@
 
 
             <EditText
-                android:id="@+id/phone_text"
+                android:id="@+id/reset_email_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -76,7 +76,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/phone_text" />
+                app:layout_constraintTop_toBottomOf="@+id/reset_email_text" />
 
             <Button
                 android:id="@+id/button"
@@ -94,7 +94,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/password_text" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/tvUserEmail"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="28dp"

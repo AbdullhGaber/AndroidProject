@@ -10,22 +10,23 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image"
+        android:id="@+id/nav_header_profile"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_marginTop="24dp"
         android:src="@drawable/download"
         app:civ_border_color="#FF000000"
         app:civ_border_width="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        app:layout_constraintBottom_toTopOf="@+id/tvUserName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/tvUserName"
         android:layout_width="251dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"
@@ -36,15 +37,15 @@
         android:textColor="#FFFDE7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+        app:layout_constraintTop_toBottomOf="@+id/nav_header_profile" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvUserEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/nav_header_subtitle"
         android:textColor="#EDE7F6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

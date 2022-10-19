@@ -38,6 +38,7 @@ public class SplashActivity extends AppCompatActivity {
                 mIntent = new Intent(SplashActivity.this, DrawerActivity.class);
 
             startActivity(mIntent);
+            finish();
 
         }, SPLASH_DISPLAY_LENGTH);
     }
