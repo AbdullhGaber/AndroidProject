@@ -50,7 +50,7 @@ public class FireStoreUtil {
                 Map<String,Object> myMap = document.getData();
                 assert myMap != null;
                 SpUtil.writeStringPref(context,SpUtil.USER_NAME, Objects.requireNonNull(myMap.get("username")).toString());
-                SpUtil.writeStringPref(context,SpUtil.USER_NAME, Objects.requireNonNull(myMap.get("userphone")).toString());
+                SpUtil.writeStringPref(context,SpUtil.USER_PHONE, Objects.requireNonNull(myMap.get("userphone")).toString());
             } else {
                 Log.d(TAG, "Cached get failed: ", task.getException());
             }

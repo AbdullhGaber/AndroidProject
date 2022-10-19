@@ -1,5 +1,6 @@
 package com.example.travelapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -11,8 +12,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -109,9 +113,15 @@ public class LoginActivity extends AppCompatActivity {
         gsReference.child("uploads/" +
                         Objects
                                 .requireNonNull(FirebaseAuth.getInstance().getCurrentUser())
-                                .getUid())
-                .getDownloadUrl()
-                .addOnSuccessListener(uri -> SpUtil.writeStringPref(getApplicationContext(), SpUtil.USER_PHOTO, uri.toString()));
+                                .getUid()+".jpg")
+                .getDownloadUrl().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String uri = task.getResult().toString();
+                        SpUtil.writeStringPref(getApplicationContext(), SpUtil.USER_PHOTO,uri);
+                    } else {
+                        Log.d(TAG, "Cached get failed: ", task.getException());
+                    }
+                });
 
         SpUtil.writeStringPref(getApplicationContext(),SpUtil.USER_EMAIL, mEmail);
 

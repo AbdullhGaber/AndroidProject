@@ -21,3 +21,5 @@ Mapp/src/main/java/com/example/travelapplication/ui/home/UpcomingFragment.java,
 Kapp/src/main/java/com/example/travelapplication/ForgotPasswordActivity.java,1\3\13328088c182121dd9b2efc43125b6dbdbca8372
 s
 Capp/src/main/java/com/example/travelapplication/SplashActivity.java,e\a\ea6687a4ebb60a6b44d2e534d5c0e44d433fd4e4
+k
+;app/src/main/java/com/example/travelapplication/SpUtil.java,3\6\36ebe0e988db36970534168c2c3498e61366a8d0

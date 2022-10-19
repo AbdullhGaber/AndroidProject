@@ -2,8 +2,11 @@ package com.example.travelapplication;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +24,10 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DrawerActivity extends AppCompatActivity {
@@ -29,6 +36,8 @@ public class DrawerActivity extends AppCompatActivity {
     TextView userEmailView;
     private AppBarConfiguration mAppBarConfiguration;
     private NavigationView navigationView;
+    SharedPreferences prefs;
+    Handler myHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +64,7 @@ public class DrawerActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
         initializeComponents();
         setComponentsValues();
-        SpUtil.getPref(this).registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> setComponentsValues());
-
+        prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> setComponentsValues());
     }
 
 
@@ -66,10 +74,11 @@ public class DrawerActivity extends AppCompatActivity {
         drawerImageView = header.findViewById(R.id.nav_header_profile);
         userNameView = header.findViewById(R.id.tvUserName);
         userEmailView = header.findViewById(R.id.tvUserEmail);
+        prefs = SpUtil.getPref(this);
     }
 
     private void setComponentsValues() {
-        drawerImageView.setImageURI(Uri.parse(SpUtil.getPreferenceString(this, SpUtil.USER_PHOTO)));
+        new FetchImage(SpUtil.getPreferenceString(this,SpUtil.USER_PHOTO)).start();
         userNameView.setText(SpUtil.getPreferenceString(this, SpUtil.USER_NAME));
         userEmailView.setText(SpUtil.getPreferenceString(this, SpUtil.USER_EMAIL));
     }
@@ -98,4 +107,29 @@ public class DrawerActivity extends AppCompatActivity {
         finish();
     }
 
+
+    class FetchImage extends Thread{
+        String URL;
+        Bitmap bitmap;
+        FetchImage(String URL){
+            this.URL=URL;
+        }
+
+        @Override
+        public void run() {
+            InputStream inputStream = null;
+            try {
+                inputStream = new URL(URL).openStream();
+                bitmap = BitmapFactory.decodeStream(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            myHandler.post(() -> {
+                if(bitmap!=null) {
+                    drawerImageView.setImageBitmap(bitmap);
+                    SpUtil.writeStringPref(getApplicationContext(), SpUtil.USER_PHOTO, URL);
+                }
+            });
+        }
+    }
 }
