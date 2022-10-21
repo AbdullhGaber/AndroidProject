@@ -17,9 +17,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="188dp"
+            android:layout_marginBottom="1dp"
             android:text="@string/let_s_go"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,6 +33,7 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/airplane"
             android:src="@drawable/ic_launcher_foreground"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -65,7 +68,8 @@
                     android:drawablePadding="10dp"
                     android:ems="10"
                     android:hint="@string/trip_return_time"
-                    android:inputType="time"
+                    android:focusable="false"
+                    android:inputType="none"
                     android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +87,8 @@
                     android:drawablePadding="10dp"
                     android:ems="10"
                     android:hint="@string/trip_return_date"
-                    android:inputType="date"
+                    android:focusable="false"
+                    android:inputType="none"
                     android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -102,10 +107,10 @@
                     android:scrollbarSize="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                    app:layout_constraintTop_toBottomOf="@+id/travelDateText" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/travelDateText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -125,14 +130,16 @@
                     android:drawableStart="@drawable/clock_icon"
                     android:drawablePadding="10dp"
                     android:ems="10"
+                    android:focusable="false"
                     android:hint="@string/trip_time"
-                    android:inputType="time"
+                    android:importantForAutofill="no"
+                    android:inputType="none"
+                    android:text="@string/trip_time"
                     android:textColorHint="#757575"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editTextDate"
-                    tools:ignore="TouchTargetSizeCheck"
-                    android:importantForAutofill="no" />
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <EditText
                     android:id="@+id/editTextDate"
@@ -141,17 +148,19 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:autofillHints=""
                     android:drawableStart="@drawable/calendar_icon"
                     android:drawablePadding="10dp"
                     android:ems="10"
+                    android:focusable="false"
                     android:hint="@string/trip_date"
-                    android:inputType="date"
+                    android:inputType="none"
+                    android:text="@string/trip_date"
                     android:textColorHint="#757575"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edtName"
-                    android:autofillHints="" />
+                    app:layout_constraintTop_toBottomOf="@+id/edtName" />
 
                 <EditText
                     android:id="@+id/edtName"
@@ -178,17 +187,18 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:autofillHints=""
                     android:drawableStart="@drawable/plane_icon"
                     android:drawablePadding="10dp"
                     android:ems="10"
                     android:hint="@string/trip_end_point"
                     android:inputType="textPostalAddress"
                     android:minHeight="48dp"
+                    android:text="@string/trip_end_point"
                     android:textColorHint="#757575"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edtStartLoc"
-                    android:autofillHints="" />
+                    app:layout_constraintTop_toBottomOf="@+id/edtStartLoc" />
 
                 <EditText
                     android:id="@+id/edtStartLoc"
@@ -197,17 +207,18 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:autofillHints=""
                     android:drawableStart="@drawable/plane_icon"
                     android:drawablePadding="10dp"
                     android:ems="10"
                     android:hint="@string/trip_start_point"
                     android:inputType="textPostalAddress"
                     android:minHeight="48dp"
+                    android:text="@string/trip_start_point"
                     android:textColorHint="#757575"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:autofillHints="" />
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

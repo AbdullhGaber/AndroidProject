@@ -42,7 +42,7 @@
 
 
         <EditText
-            android:id="@+id/email_text"
+            android:id="@+id/phone_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -72,11 +72,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/email_text"
+            app:layout_constraintTop_toBottomOf="@+id/phone_text"
             android:importantForAutofill="no" />
 
         <Button
-            android:id="@+id/signInButton"
+            android:id="@+id/resetButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -99,7 +99,7 @@
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/design_default_color_primary_dark"
-            app:layout_constraintTop_toBottomOf="@+id/signInButton"
+            app:layout_constraintTop_toBottomOf="@+id/resetButton"
             tools:layout_editor_absoluteX="0dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

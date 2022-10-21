@@ -38,4 +38,16 @@
     <string name="trip_time">Trip Time</string>
     <string name="trip_return_date">Trip Return Date</string>
     <string name="trip_return_time">Trip Return Time</string>
+    <string name="tripia">Tripia</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="reset">Reset</string>
+    <string name="return_to_login">Return to Login</string>
+    <string name="travel_when">travel when</string>
+    <string name="travel_name">travel name</string>
+    <string name="over">over</string>
+    <string name="travel_from">Travel From</string>
+    <string name="travel_to">Travel To</string>
+    <string name="date">date</string>
+    <string name="travel_time">travel time</string>
+    <string name="todo">TODO</string>
 </resources>
