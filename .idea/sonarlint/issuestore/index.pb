@@ -1,12 +1,6 @@
 
 X
 (gradle/wrapper/gradle-wrapper.properties,f\b\fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
-s
-Capp/src/main/java/com/example/travelapplication/SignUpActivity.java,6\7\675496da726ef8586f6e2417b5e97484e9ce1bd0
-y
-Iapp/src/main/java/com/example/travelapplication/ui/home/HomeFragment.java,8\9\89b9b8a0456ef1945ef8803515fa2456fbe1cec4
-z
-Japp/src/main/java/com/example/travelapplication/ui/home/HomeViewModel.java,3\b\3b3821622c43b9f1e8e0826b4cf29980057e79be
 „
 Tapp/src/main/java/com/example/travelapplication/ui/slideshow/SlideshowViewModel.java,6\3\63e2c7579a3466b27d292c2b2ef985011b3f1bf2
 ƒ
@@ -15,5 +9,17 @@ Sapp/src/main/java/com/example/travelapplication/ui/slideshow/SlideshowFragment.
 Papp/src/main/java/com/example/travelapplication/ui/gallery/GalleryViewModel.java,3\d\3de8c1b4bdcb430a39387adecfcd24e62644f018
 
 Oapp/src/main/java/com/example/travelapplication/ui/gallery/GalleryFragment.java,9\5\95e9adb1258844b13898f3a9794c7baeca3ef80d
+t
+Dapp/src/main/java/com/example/travelapplication/NewTripActivity.java,b\4\b4245953cb7eab0ff70a1b55e1dece1d74ab223e
 @
 app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
+~
+Napp/src/main/java/com/example/travelapplication/ui/home/UpcomingViewModel.java,8\8\88ae437a992b83a3fc3bdf9d1713141918ca9844
+}
+Mapp/src/main/java/com/example/travelapplication/ui/home/UpcomingFragment.java,6\d\6d4f0415473166ff57fd3c10749803a1968d998a
+{
+Kapp/src/main/java/com/example/travelapplication/ForgotPasswordActivity.java,1\3\13328088c182121dd9b2efc43125b6dbdbca8372
+s
+Capp/src/main/java/com/example/travelapplication/SplashActivity.java,e\a\ea6687a4ebb60a6b44d2e534d5c0e44d433fd4e4
+k
+;app/src/main/java/com/example/travelapplication/SpUtil.java,3\6\36ebe0e988db36970534168c2c3498e61366a8d0

@@ -33,11 +33,12 @@ public class SplashActivity extends AppCompatActivity {
             FirebaseUser currentUser = mAuth.getCurrentUser();
 
             if(currentUser == null)
-                mIntent = new Intent(SplashActivity.this, DrawerActivity.class);
-            else
                 mIntent = new Intent(SplashActivity.this, LoginActivity.class);
+            else
+                mIntent = new Intent(SplashActivity.this, DrawerActivity.class);
 
             startActivity(mIntent);
+            finish();
 
         }, SPLASH_DISPLAY_LENGTH);
     }
