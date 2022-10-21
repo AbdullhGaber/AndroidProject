@@ -1,12 +1,9 @@
 package com.example.travelapplication;
 
+
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,20 +21,24 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DrawerActivity extends AppCompatActivity {
-    CircleImageView drawerImageView;
-    TextView userNameView;
-    TextView userEmailView;
     private AppBarConfiguration mAppBarConfiguration;
-    private NavigationView navigationView;
-    SharedPreferences prefs;
-    Handler myHandler = new Handler();
+
+    CircleImageView mDrawerImageView;
+
+    TextView mUserNameText;
+    TextView mUserEmailText;
+
+    private NavigationView mNavigationView;
+
+    SharedPreferences mPrefs;
+
+    private String mSharedPhotoString;
+    private String mSharedUserNameString;
+    private String mSharedEmailString;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class DrawerActivity extends AppCompatActivity {
         binding.appBarDrawer.fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
         DrawerLayout drawer = binding.drawerLayout;
-        navigationView = binding.navView;
+        mNavigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -61,28 +62,46 @@ public class DrawerActivity extends AppCompatActivity {
         assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        NavigationUI.setupWithNavController(mNavigationView, navController);
+
+
         initializeComponents();
         setComponentsValues();
-        prefs.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> setComponentsValues());
+
+        mPrefs.registerOnSharedPreferenceChangeListener
+                ( (sharedPreferences, key) -> setComponentsValues() );
     }
 
-
-
     private void initializeComponents() {
-        View header = navigationView.getHeaderView(0);
-        drawerImageView = header.findViewById(R.id.nav_header_profile);
-        userNameView = header.findViewById(R.id.tvUserName);
-        userEmailView = header.findViewById(R.id.tvUserEmail);
-        prefs = SpUtil.getPref(this);
+        View header = mNavigationView.getHeaderView(0);
+        mDrawerImageView = header.findViewById(R.id.nav_header_profile);
+        mUserNameText = header.findViewById(R.id.tvUserName);
+        mUserEmailText = header.findViewById(R.id.tvUserEmail);
+        mPrefs = SpUtil.getPref(this);
     }
 
     private void setComponentsValues() {
-        new FetchImage(SpUtil.getPreferenceString(this,SpUtil.USER_PHOTO)).start();
-        userNameView.setText(SpUtil.getPreferenceString(this, SpUtil.USER_NAME));
-        userEmailView.setText(SpUtil.getPreferenceString(this, SpUtil.USER_EMAIL));
+        getPreferenceString();
+
+        new FetchImage(mSharedPhotoString, mDrawerImageView , getApplicationContext()).start();
+
+        mUserNameText.setText(mSharedUserNameString);
+
+        mUserEmailText.setText(mSharedEmailString);
     }
 
+    private void getPreferenceString() {
+        mSharedPhotoString = SpUtil.getPreferenceString(this,SpUtil.USER_PHOTO);
+        mSharedUserNameString = SpUtil.getPreferenceString(this,SpUtil.USER_NAME);
+        mSharedEmailString = SpUtil.getPreferenceString(this,SpUtil.USER_EMAIL);
+    }
+
+    public void signOut(MenuItem item) {
+        FirebaseAuth.getInstance().signOut();
+        Intent mIntent = new Intent(DrawerActivity.this, LoginActivity.class);
+        startActivity(mIntent);
+        finish();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,36 +119,5 @@ public class DrawerActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void signOut(MenuItem item) {
-        FirebaseAuth.getInstance().signOut();
-        Intent mIntent = new Intent(DrawerActivity.this, LoginActivity.class);
-        startActivity(mIntent);
-        finish();
-    }
 
-
-    class FetchImage extends Thread{
-        String URL;
-        Bitmap bitmap;
-        FetchImage(String URL){
-            this.URL=URL;
-        }
-
-        @Override
-        public void run() {
-            InputStream inputStream = null;
-            try {
-                inputStream = new URL(URL).openStream();
-                bitmap = BitmapFactory.decodeStream(inputStream);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            myHandler.post(() -> {
-                if(bitmap!=null) {
-                    drawerImageView.setImageBitmap(bitmap);
-                    SpUtil.writeStringPref(getApplicationContext(), SpUtil.USER_PHOTO, URL);
-                }
-            });
-        }
-    }
 }

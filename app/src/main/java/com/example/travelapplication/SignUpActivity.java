@@ -1,5 +1,7 @@
 package com.example.travelapplication;
 
+import static android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +10,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -36,7 +39,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText mUserNameText;
     EditText mPasswordConfirmationText;
     EditText mPhoneText;
-    CircleImageView circularImage;
+    CircleImageView mCircleImageView;
     TextView mAlreadyHaveAccountText;
     TextView mUploadPicText;
 
@@ -69,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
         mPasswordConfirmationText = findViewById(R.id.password_confirm_edit);
         mPhoneText = findViewById(R.id.phone_number_edit);
         mSignUpBtn = findViewById(R.id.signup_button);
-        circularImage = findViewById(R.id.nav_header_profile);
+        mCircleImageView = findViewById(R.id.nav_header_profile);
     }
 
     private void setComponentValues() {
@@ -140,10 +143,36 @@ public class SignUpActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signUpWithEmail:success");
-                        uploadImage(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
-                        FireStoreUtil.addUserCollection(mUser,mPhone,Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+
+                        uploadImage
+                                (
+                                  Objects.requireNonNull
+                                  (
+                                  FirebaseAuth.
+                                  getInstance().
+                                  getCurrentUser()
+                                  ).
+                                  getUid()
+                                );
+
+                        FireStoreUtil.
+                        addUserCollection
+                                        (
+                                            mUser,
+                                            mPhone,
+                                            Objects.requireNonNull
+                                            (
+                                                 FirebaseAuth.
+                                                 getInstance().
+                                                 getCurrentUser()
+                                            ).getUid()
+                                        );
+
                         writeDataToSharedPref();
-                        Toast.makeText(SignUpActivity.this, "Authentication success.", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(SignUpActivity.this, "Authentication success.",
+                        Toast.LENGTH_SHORT).show();
+
                         mIntent = new Intent(SignUpActivity.this,DrawerActivity.class);
                         startActivity(mIntent);
                         finish();
@@ -151,7 +180,7 @@ public class SignUpActivity extends AppCompatActivity {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signUpWithEmail:failure", task.getException());
                         Toast.makeText(SignUpActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -166,7 +195,7 @@ public class SignUpActivity extends AppCompatActivity {
     private void pickImage(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
-        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, EXTERNAL_CONTENT_URI);
         pickIntent.setType("image/*");
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
@@ -187,6 +216,7 @@ public class SignUpActivity extends AppCompatActivity {
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
+
     private void uploadImage(String userID) {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading image");
@@ -212,6 +242,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void setImageViewPhoto(Uri uri) {
-        circularImage.setImageURI(uri);
+        mCircleImageView.setImageURI(uri);
     }
 }

@@ -22,9 +22,15 @@ public class SpUtil {
     }
 
     public static void writeStringPref(Context context, String key, String value){
-        SharedPreferences.Editor editor = getPref(context).edit();
+        SharedPreferences.Editor editor = getEditor(context);
+
         editor.putString(key,value);
+
         editor.apply();
+    }
+
+    private static SharedPreferences.Editor getEditor(Context context) {
+        return getPref(context).edit();
     }
 
 }

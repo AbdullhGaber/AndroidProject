@@ -1,21 +1,15 @@
 package com.example.travelapplication;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -23,7 +17,8 @@ public class FireStoreUtil {
 
     public static final String TAG="Documents";
     private static final String USERS="users";
-
+    private static String mUser;
+    private static FirebaseFirestore mDb;
 
     private FireStoreUtil(){}
 
@@ -31,18 +26,19 @@ public class FireStoreUtil {
         Map<String,String> tempMap = new HashMap<>();
         tempMap.put("username",userName);
         tempMap.put("userphone",userPhone);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+         mDb = FirebaseFirestore.getInstance();
 
-         String user = "User-"+userID;
-        db.collection(USERS).document(user).set(tempMap);
+          mUser = "User-"+userID;
+        mDb.collection(USERS).document(mUser).set(tempMap);
 
     }
 
+    public static void documentImplementation(String userID, Context context){
+        DocumentReference docRef = getDocRef(userID);
+        writePrefFromDoc(context, docRef);
+    }
 
-    public static void getUserDocument(String userID, Context context){
-        String user = "User-"+userID;
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection(USERS).document(user);
+    private static void writePrefFromDoc(Context context, DocumentReference docRef) {
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -55,6 +51,13 @@ public class FireStoreUtil {
                 Log.d(TAG, "Cached get failed: ", task.getException());
             }
         });
+    }
+
+    @NonNull
+    private static DocumentReference getDocRef(String userID) {
+        mUser = "User-"+ userID;
+        mDb = FirebaseFirestore.getInstance();
+        return mDb.collection(USERS).document(mUser);
     }
 
 

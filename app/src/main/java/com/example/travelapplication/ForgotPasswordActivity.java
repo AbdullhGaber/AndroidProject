@@ -19,13 +19,21 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
         initializeComponents();
+
+        onRestClick();
+    }
+
+    private void onRestClick() {
         mResetButton.setOnClickListener(v -> {
-            if (mEtEmail.getText().toString().isEmpty()) {
-                Toast.makeText(this, "Field cannot be empty", Toast.LENGTH_SHORT).show();
-            } else {
+            if (!emailIsEmpty())
                 FirebaseAuth.getInstance().sendPasswordResetEmail(mEtEmail.getText().toString());
-            }
+            else
+                Toast.makeText(this, "Field cannot be empty", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    private boolean emailIsEmpty() {
+        return mEtEmail.getText().toString().isEmpty();
     }
 
     private void initializeComponents() {
