@@ -1,32 +1,28 @@
 package com.example.travelapplication;
 
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import android.util.Log;
 
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "TAG";
-    public static final String FULL_URL = "gs://tripapplication-b1b72.appspot.com/";
 
     private FirebaseAuth mAuth;
 
@@ -97,14 +93,15 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "signInWithEmail:success");
 
                         mUserId = getUid();
-
+                        //fetch data to update sharedPrefs
                         FireStoreUtil.documentImplementation(mUserId,getApplicationContext());
 
-                        writeToSharedPreferences();
+
 
                         makeToast("Authentication success.");
 
                         mIntent = new Intent(LoginActivity.this, DrawerActivity.class);
+                        mIntent.putExtra("starterActivity","LoginActivity");
                         startActivity(mIntent);
                         finish();
 
@@ -120,34 +117,13 @@ public class LoginActivity extends AppCompatActivity {
         Log.w(TAG, "signInWithEmail:failure", task.getException());
     }
 
-    private void uriFailedLogMessage(Task<Uri> task) {
-        Log.d(TAG, "Cached get failed: ", task.getException());
-    }
+
 
     private void makeToast(String message) {
         Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void writeToSharedPreferences() {
-        StorageReference gsReference =
-                        FirebaseStorage.
-                        getInstance().
-                        getReferenceFromUrl(FULL_URL);
 
-        getDownloadUrl(gsReference).
-        addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-
-                            String uri = task.getResult().toString();
-
-                            SpUtil.writeStringPref(getApplicationContext(), SpUtil.USER_PHOTO,uri);
-
-                        } else uriFailedLogMessage(task);
-                    });
-
-        SpUtil.writeStringPref(getApplicationContext(),SpUtil.USER_EMAIL, mEmail);
-        
-    }
 
     @Nullable
     private FirebaseUser getCurrentUser() {
@@ -158,8 +134,5 @@ public class LoginActivity extends AppCompatActivity {
     private String getUid() {
         return Objects.requireNonNull(getCurrentUser()).getUid();
     }
-    @NonNull
-    private Task<Uri> getDownloadUrl(StorageReference gsReference) {
-        return gsReference.child("uploads/" + mUserId + ".jpg").getDownloadUrl();
-    }
+
 }

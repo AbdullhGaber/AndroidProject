@@ -1,6 +1,9 @@
 package com.example.travelapplication;
 
+
+
 import android.content.Context;
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -18,19 +21,20 @@ public class FireStoreUtil {
     public static final String TAG="Documents";
     private static final String USERS="users";
     private static String mUser;
-    private static FirebaseFirestore mDb;
 
     private FireStoreUtil(){}
 
-    public static void addUserCollection(String userName, String userPhone ,String userID){
+    public static void addUserCollection(String userName, String userPhone ,String userID, String photoUrl, String email){
+        // this function puts user data into a map and uploads it to database, no need to wait for it
         Map<String,String> tempMap = new HashMap<>();
+        FirebaseFirestore mDb;
         tempMap.put("username",userName);
         tempMap.put("userphone",userPhone);
+        tempMap.put("userphoto",photoUrl);
+        tempMap.put("useremail",email);
          mDb = FirebaseFirestore.getInstance();
-
           mUser = "User-"+userID;
         mDb.collection(USERS).document(mUser).set(tempMap);
-
     }
 
     public static void documentImplementation(String userID, Context context){
@@ -39,6 +43,8 @@ public class FireStoreUtil {
     }
 
     private static void writePrefFromDoc(Context context, DocumentReference docRef) {
+        // this function waits until fetching data is complete, then writes changes to sharedPrefs
+        // which is in the completeListener , which then fires the sharedPref onChangeListener
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -47,6 +53,9 @@ public class FireStoreUtil {
                 assert myMap != null;
                 SpUtil.writeStringPref(context,SpUtil.USER_NAME, Objects.requireNonNull(myMap.get("username")).toString());
                 SpUtil.writeStringPref(context,SpUtil.USER_PHONE, Objects.requireNonNull(myMap.get("userphone")).toString());
+                SpUtil.writeStringPref(context,SpUtil.USER_PHOTO, Objects.requireNonNull(myMap.get("userphoto")).toString());
+                SpUtil.writeStringPref(context,SpUtil.USER_EMAIL, Objects.requireNonNull(myMap.get("useremail")).toString());
+
             } else {
                 Log.d(TAG, "Cached get failed: ", task.getException());
             }
@@ -55,6 +64,7 @@ public class FireStoreUtil {
 
     @NonNull
     private static DocumentReference getDocRef(String userID) {
+        FirebaseFirestore mDb;
         mUser = "User-"+ userID;
         mDb = FirebaseFirestore.getInstance();
         return mDb.collection(USERS).document(mUser);

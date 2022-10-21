@@ -2,21 +2,20 @@ package com.example.travelapplication;
 
 import static android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
@@ -51,6 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Uri imageUri;
 
     Button mSignUpBtn;
+    private boolean imgIsSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +95,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private boolean fieldIsEmpty() {
-        return mEmail.equals("") || mPassword.equals("") || mUser.equals("") || mPhone.equals("");
+        return mEmail.equals("") || mPassword.equals("") || mUser.equals("") || mPhone.equals("") || !imgIsSet;
     }
 
     private void dataValidation() {
@@ -132,9 +132,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void uploadPicText() {
-        mUploadPicText.setOnClickListener(v -> {
-            pickImage();
-        });
+        mUploadPicText.setOnClickListener(v -> pickImage());
     }
 
     private void createAccount() {
@@ -143,7 +141,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signUpWithEmail:success");
-
+                        //Start uploading the image while naming it with the user ID
                         uploadImage
                                 (
                                   Objects.requireNonNull
@@ -154,28 +152,12 @@ public class SignUpActivity extends AppCompatActivity {
                                   ).
                                   getUid()
                                 );
-
-                        FireStoreUtil.
-                        addUserCollection
-                                        (
-                                            mUser,
-                                            mPhone,
-                                            Objects.requireNonNull
-                                            (
-                                                 FirebaseAuth.
-                                                 getInstance().
-                                                 getCurrentUser()
-                                            ).getUid()
-                                        );
-
                         writeDataToSharedPref();
 
                         Toast.makeText(SignUpActivity.this, "Authentication success.",
                         Toast.LENGTH_SHORT).show();
 
-                        mIntent = new Intent(SignUpActivity.this,DrawerActivity.class);
-                        startActivity(mIntent);
-                        finish();
+
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signUpWithEmail:failure", task.getException());
@@ -188,7 +170,6 @@ public class SignUpActivity extends AppCompatActivity {
     private void writeDataToSharedPref() {
         SpUtil.writeStringPref(this,SpUtil.USER_EMAIL,mEmail);
         SpUtil.writeStringPref(this,SpUtil.USER_NAME,mUser);
-        SpUtil.writeStringPref(this,SpUtil.USER_PHOTO,imageUri.toString());
         SpUtil.writeStringPref(this,SpUtil.USER_PHONE,mPhone);
     }
 
@@ -206,6 +187,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PICK_IMAGE && resultCode == RESULT_OK){
+            assert data != null;
             imageUri = data.getData();
             setImageViewPhoto(imageUri);
         }
@@ -218,14 +200,26 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void uploadImage(String userID) {
+        //progress dialog to wait for uploading
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading image");
         pd.show();
         if(imageUri!=null){
+            //uploading image to DB
             StorageReference fileReference = FirebaseStorage.getInstance().getReference().child("uploads").child(userID+"."+getFileExtension(imageUri));
             fileReference.putFile(imageUri).addOnCompleteListener(task -> fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
                 String url = uri.toString();
-                Log.d("DownloadUrl" , url);
+                //Waiting for the upload to finish so we can fire the intent to start next activity, while putting the name of the firing activity
+                // along with the URL of the photo so we can use it later, we can't do that unless the task is finished, so e cannot get outside the complete listener
+                mIntent = new Intent(SignUpActivity.this,DrawerActivity.class);
+                mIntent.putExtra("photoUrl",url);
+                mIntent.putExtra("username",mUser);
+                mIntent.putExtra("useremail",mEmail);
+                mIntent.putExtra("userphone",mPhone);
+                mIntent.putExtra("starterActivity","SignUpActivity");
+                startActivity(mIntent);
+                finish();
+                //dismissing the progress dialog with try to avoid exceptions
                 dismissWithTry(pd);
                 Toast.makeText(SignUpActivity.this, "Image upload successful", Toast.LENGTH_SHORT).show();
             }));
@@ -233,7 +227,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public static void dismissWithTry(ProgressDialog pd) {
-
         try {
             pd.dismiss();
         } catch (final Exception e) {
@@ -243,5 +236,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void setImageViewPhoto(Uri uri) {
         mCircleImageView.setImageURI(uri);
+        imgIsSet = true;
     }
 }
