@@ -101,7 +101,8 @@ public class DrawerActivity extends AppCompatActivity {
                             mSharedUserPhoneString,
                             mUserID,
                             mSharedPhotoString,
-                            mSharedEmailString
+                            mSharedEmailString,
+                            null
                     );
         }
         else{

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,18 +25,91 @@ public class FireStoreUtil {
     public static final  String USEREMAIL = "useremail";
     public static final  String USERPHONE = "userphone";
     public static final  String PHOTO_URL = "userphoto";
-
+    public static final String TRIP = "trip";
     private static String mUserHashDocument;
+    private static String mTripHashDocument;
 
     private static FirebaseFirestore mDb =  FirebaseFirestore.getInstance();
 
 
     private FireStoreUtil(){}
 
-    public static void addDocumentToUserCollection(String userName, String userPhone , String userID, String photoUrl, String email){
+
+    public static class TripFireStore{
+
+        public static final String ID = "id";
+        public final static String START_POINT = "startpoint";
+        private final static String END_POINT = "endpoint";
+        private final static String NAME = "name";
+        private final static String DATE = "date";
+        private final static String TIME =  "time";
+        private final static String TRIP_STATUS = "tripstatus";
+        private final static String RETURN_DATE = "returndate";
+        private final static String RETURN_TIME = "returntime";
+        private final static String NOTES = "notes";
+
+
+
+        public static void addDocumentToTripCollection(Trip trip , String userID){
+            Map<String, String> tripDataMap =
+                    FireStoreUtil.TripFireStore.createTripDocumentData(trip ,userID);
+
+            getTripDocument().set(tripDataMap);
+
+            Map<String, Object> tripIdMap = getIdMap();
+            getTripDocument().update(tripIdMap);
+
+            Map<String, Object> tripGeoPointsDataMap = getGeoPointsIntoMap(trip );
+            getTripDocument().update(tripGeoPointsDataMap);
+
+
+        }
+
+        @NonNull
+        private static Map<String, Object> getIdMap() {
+            Map<String, Object> tripIdMap = new HashMap<>();
+            tripIdMap.put(ID , getTripDocument().getId());
+            return tripIdMap;
+        }
+
+        private static Map<String, Object> getGeoPointsIntoMap(Trip trip ) {
+            Map<String, Object> tripGeoPointsDataMap = new HashMap<>() ;
+            tripGeoPointsDataMap.put(START_POINT, trip.getStartPoint());
+            tripGeoPointsDataMap.put(END_POINT, trip.getStartPoint());
+            return tripGeoPointsDataMap;
+        }
+
+
+        private static DocumentReference getTripDocument() {
+            return  mDb.collection(USERS).
+                    document(mUserHashDocument).collection(mTripHashDocument).
+                    document();
+        }
+
+        private static Map<String, String> createTripDocumentData(Trip trip , String userID) {
+            mTripHashDocument = "Trips-"+ userID;
+            mUserHashDocument = "User-"+ userID;
+
+            Map<String, String> tripDataMap = new HashMap<>();
+
+            tripDataMap.put(NAME, trip.getName());
+            tripDataMap.put(TIME, trip.getTime());
+            tripDataMap.put(DATE, trip.getDate());
+            tripDataMap.put(TRIP_STATUS, trip.getTripStatus());
+            tripDataMap.put(RETURN_DATE, trip.getReturnDate());
+            tripDataMap.put(RETURN_TIME, trip.getReturnTime());
+
+
+
+            return tripDataMap;
+        }
+
+    }
+
+    public static void addDocumentToUserCollection(String userName, String userPhone , String userID, String photoUrl, String email , Trip trip){
         // this function puts user data into a map and uploads it to database, no need to wait for it
         Map<String, String> userDataMap =
-                createUserDocument(userName, userPhone, userID, photoUrl, email);
+                createTripDocument(userName, userPhone, userID, photoUrl, email ,trip);
 
         mDb.collection(USERS).
         document(mUserHashDocument).
@@ -44,13 +118,14 @@ public class FireStoreUtil {
     }
 
     @NonNull
-    private static Map<String, String> createUserDocument(String userName, String userPhone, String userID, String photoUrl, String email) {
+    private static Map<String, String> createTripDocument(String userName, String userPhone, String userID, String photoUrl, String email , Trip trip) {
         Map<String, String> userDataMap = new HashMap<>();
 
         userDataMap.put(USERNAME, userName);
         userDataMap.put(USEREMAIL, email);
         userDataMap.put(USERPHONE, userPhone);
         userDataMap.put(PHOTO_URL, photoUrl);
+
 
         mUserHashDocument = "User-"+ userID;
 

@@ -2,17 +2,21 @@ package com.example.travelapplication;
 
 import android.location.Geocoder;
 
+import com.google.firebase.firestore.GeoPoint;
+
 public class Trip {
-    private Geocoder startPoint;
-    private Geocoder endPoint;
+    private GeoPoint startPoint;
+    private GeoPoint endPoint;
+    private String id;
     private String name;
     private String date;
     private String time;
     private String tripStatus;
     private String returnDate;
     private String returnTime;
+    private String[] notes;
 
-    public Trip(Geocoder startPoint, Geocoder endPoint, String name, String date, String time, String tripStatus, String returnDate, String returnTime) {
+    public Trip(GeoPoint startPoint, GeoPoint endPoint, String name, String date, String time, String tripStatus, String returnDate, String returnTime , String[] notes) {
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.name = name;
@@ -21,21 +25,22 @@ public class Trip {
         this.tripStatus = tripStatus;
         this.returnDate = returnDate;
         this.returnTime = returnTime;
+        this.notes = notes;
     }
 
-    public Geocoder getStartPoint() {
+    public GeoPoint getStartPoint() {
         return startPoint;
     }
 
-    public void setStartPoint(Geocoder startPoint) {
+    public void setStartPoint(GeoPoint startPoint) {
         this.startPoint = startPoint;
     }
 
-    public Geocoder getEndPoint() {
+    public GeoPoint getEndPoint() {
         return endPoint;
     }
 
-    public void setEndPoint(Geocoder endPoint) {
+    public void setEndPoint(GeoPoint endPoint) {
         this.endPoint = endPoint;
     }
 
@@ -83,7 +88,11 @@ public class Trip {
         return returnTime;
     }
 
-    public void setReturnTime(String returnTime) {
-        this.returnTime = returnTime;
+    public void setNotes(String[] notes) {
+        this.notes = notes;
     }
+    public String[] getNotes() {
+      return this.notes ;
+    }
+
 }
