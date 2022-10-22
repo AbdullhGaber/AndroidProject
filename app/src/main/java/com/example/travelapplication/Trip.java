@@ -1,18 +1,27 @@
 package com.example.travelapplication;
 
 import android.location.Geocoder;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Trip {
-    private Geocoder startPoint;
-    private Geocoder endPoint;
+import com.google.firebase.firestore.GeoPoint;
+
+import java.util.List;
+
+public class Trip implements Parcelable {
+    private GeoPoint startPoint;
+    private GeoPoint endPoint;
+    private String id;
     private String name;
     private String date;
     private String time;
     private String tripStatus;
     private String returnDate;
     private String returnTime;
+    private List<Note> notes;
 
-    public Trip(Geocoder startPoint, Geocoder endPoint, String name, String date, String time, String tripStatus, String returnDate, String returnTime) {
+    public Trip(GeoPoint startPoint, GeoPoint endPoint, String name, String date, String time, String tripStatus, String returnDate, String returnTime , List<Note> notes)
+    {
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.name = name;
@@ -21,21 +30,44 @@ public class Trip {
         this.tripStatus = tripStatus;
         this.returnDate = returnDate;
         this.returnTime = returnTime;
+        this.notes = notes;
     }
 
-    public Geocoder getStartPoint() {
+    protected Trip(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        date = in.readString();
+        time = in.readString();
+        tripStatus = in.readString();
+        returnDate = in.readString();
+        returnTime = in.readString();
+    }
+
+    public static final Creator<Trip> CREATOR = new Creator<Trip>() {
+        @Override
+        public Trip createFromParcel(Parcel in) {
+            return new Trip(in);
+        }
+
+        @Override
+        public Trip[] newArray(int size) {
+            return new Trip[size];
+        }
+    };
+
+    public GeoPoint getStartPoint() {
         return startPoint;
     }
 
-    public void setStartPoint(Geocoder startPoint) {
+    public void setStartPoint(GeoPoint startPoint) {
         this.startPoint = startPoint;
     }
 
-    public Geocoder getEndPoint() {
+    public GeoPoint getEndPoint() {
         return endPoint;
     }
 
-    public void setEndPoint(Geocoder endPoint) {
+    public void setEndPoint(GeoPoint endPoint) {
         this.endPoint = endPoint;
     }
 
@@ -83,7 +115,28 @@ public class Trip {
         return returnTime;
     }
 
-    public void setReturnTime(String returnTime) {
-        this.returnTime = returnTime;
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+
+    public List<Note> getNotes() {
+      return this.notes ;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(name);
+        parcel.writeString(date);
+        parcel.writeString(time);
+        parcel.writeString(tripStatus);
+        parcel.writeString(returnDate);
+        parcel.writeString(returnTime);
     }
 }
