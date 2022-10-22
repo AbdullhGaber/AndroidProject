@@ -23,6 +23,7 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "TAG";
+    public static final String STARTER_ACTIVITY = "starterActivity";
 
     private FirebaseAuth mAuth;
 
@@ -37,8 +38,6 @@ public class LoginActivity extends AppCompatActivity {
     private String mEmail;
     private String mPassword;
     private String mUserId;
-
-
 
 
 
@@ -89,21 +88,17 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(mEmail, mPassword)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithEmail:success");
-
                         mUserId = getUid();
+
+                        // Sign in success, update UI with the signed-in user's information
+                        authSuccessLogMessage(task);
+
                         //fetch data to update sharedPrefs
                         FireStoreUtil.documentImplementation(mUserId,getApplicationContext());
 
-
-
                         makeToast("Authentication success.");
 
-                        mIntent = new Intent(LoginActivity.this, DrawerActivity.class);
-                        mIntent.putExtra("starterActivity","LoginActivity");
-                        startActivity(mIntent);
-                        finish();
+                        goToDrawerActivity();
 
                     } else {
                         // If sign in fails, display a message to the user.
@@ -113,17 +108,24 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    private void goToDrawerActivity() {
+        mIntent = new Intent(LoginActivity.this, DrawerActivity.class);
+        mIntent.putExtra(STARTER_ACTIVITY,"LoginActivity");
+        startActivity(mIntent);
+        finish();
+    }
+
     private void authFailedLogMessage(Task<AuthResult> task) {
         Log.w(TAG, "signInWithEmail:failure", task.getException());
     }
 
-
+    private void authSuccessLogMessage(Task<AuthResult> task) {
+        Log.d(TAG, "signInWithEmail:success", task.getException());
+    }
 
     private void makeToast(String message) {
         Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
     }
-
-
 
     @Nullable
     private FirebaseUser getCurrentUser() {

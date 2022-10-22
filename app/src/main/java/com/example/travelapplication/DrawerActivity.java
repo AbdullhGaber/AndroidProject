@@ -70,8 +70,8 @@ public class DrawerActivity extends AppCompatActivity {
 
 
         initializeComponents();
-        setComponentsValues();
         mPrefs.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> setComponentsValues());
+        setComponentsValues();
     }
 
     private void initializeComponents() {
@@ -80,32 +80,53 @@ public class DrawerActivity extends AppCompatActivity {
         mUserNameText = header.findViewById(R.id.tvUserName);
         mUserEmailText = header.findViewById(R.id.tvUserEmail);
         mPrefs = SpUtil.getPref(this);
-        mIntent = getIntent();
+        mIntent = getIntent(); // null if from SplashActivity
         mUserID = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     }
 
     private void setComponentsValues() {
         // Checking the firing activity of the intent to do actions based on it
-        if(mIntent.getStringExtra("starterActivity").equals("SignUpActivity")){
-            // if we sign up user for first time we will add data to DB and we get them  from the intent as we put it there
-            mSharedPhotoString = mIntent.getStringExtra("photoUrl");
-            mSharedUserPhoneString = mIntent.getStringExtra("userphone");
-            mSharedUserNameString = mIntent.getStringExtra("username");
-            mSharedEmailString = mIntent.getStringExtra("useremail");
-            FireStoreUtil.addUserCollection(mSharedUserNameString,mSharedUserPhoneString,mUserID,mSharedPhotoString,mSharedEmailString);
+        if(mIntent.getStringExtra(SignUpActivity.STARTER_ACTIVITY).equals("SignUpActivity")){
+
+            /*
+             if we sign up user for first time we will add data to DB
+             and we get them from the intent as we put it there
+            */
+
+            getIntentValues();
+
+            FireStoreUtil.addDocumentToUserCollection
+                    (
+                            mSharedUserNameString,
+                            mSharedUserPhoneString,
+                            mUserID,
+                            mSharedPhotoString,
+                            mSharedEmailString
+                    );
         }
         else{
-            // if any activity fires the intent like login or splash we will get the already registered shared prefs
-            getPreferenceString();
-        }
-        //this will happen in any case
+            /*
+                if any activity has data-less intent like login or splash
+                we will get the already registered shared prefs
+            */
 
+            getPreferenceValues();
+        }
+
+        //this will happen in any case
         new FetchImage(mSharedPhotoString, mDrawerImageView , getApplicationContext()).start();
         mUserNameText.setText(mSharedUserNameString);
         mUserEmailText.setText(mSharedEmailString);
     }
 
-    private void getPreferenceString() {
+    private void getIntentValues() {
+        mSharedPhotoString = mIntent.getStringExtra(SignUpActivity.PHOTO_URL);
+        mSharedUserNameString = mIntent.getStringExtra(SignUpActivity.USERNAME);
+        mSharedEmailString = mIntent.getStringExtra(SignUpActivity.USEREMAIL);
+        mSharedUserPhoneString = mIntent.getStringExtra(SignUpActivity.USERPHONE);
+    }
+
+    private void getPreferenceValues() {
         mSharedPhotoString = SpUtil.getPreferenceString(this,SpUtil.USER_PHOTO);
         mSharedUserNameString = SpUtil.getPreferenceString(this,SpUtil.USER_NAME);
         mSharedEmailString = SpUtil.getPreferenceString(this,SpUtil.USER_EMAIL);

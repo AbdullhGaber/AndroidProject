@@ -18,57 +18,83 @@ import java.util.Objects;
 
 public class FireStoreUtil {
 
-    public static final String TAG="Documents";
     private static final String USERS="users";
-    private static String mUser;
+    public static final  String  TAG ="Documents";
+    public static final  String USERNAME = "username";
+    public static final  String USEREMAIL = "useremail";
+    public static final  String USERPHONE = "userphone";
+    public static final  String PHOTO_URL = "userphoto";
+
+    private static String mUserHashDocument;
+
+    private static FirebaseFirestore mDb =  FirebaseFirestore.getInstance();
+
 
     private FireStoreUtil(){}
 
-    public static void addUserCollection(String userName, String userPhone ,String userID, String photoUrl, String email){
+    public static void addDocumentToUserCollection(String userName, String userPhone , String userID, String photoUrl, String email){
         // this function puts user data into a map and uploads it to database, no need to wait for it
-        Map<String,String> tempMap = new HashMap<>();
-        FirebaseFirestore mDb;
-        tempMap.put("username",userName);
-        tempMap.put("userphone",userPhone);
-        tempMap.put("userphoto",photoUrl);
-        tempMap.put("useremail",email);
-         mDb = FirebaseFirestore.getInstance();
-          mUser = "User-"+userID;
-        mDb.collection(USERS).document(mUser).set(tempMap);
+        Map<String, String> userDataMap =
+                createUserDocument(userName, userPhone, userID, photoUrl, email);
+
+        mDb.collection(USERS).
+        document(mUserHashDocument).
+        set(userDataMap);
+
+    }
+
+    @NonNull
+    private static Map<String, String> createUserDocument(String userName, String userPhone, String userID, String photoUrl, String email) {
+        Map<String, String> userDataMap = new HashMap<>();
+
+        userDataMap.put(USERNAME, userName);
+        userDataMap.put(USEREMAIL, email);
+        userDataMap.put(USERPHONE, userPhone);
+        userDataMap.put(PHOTO_URL, photoUrl);
+
+        mUserHashDocument = "User-"+ userID;
+
+        return userDataMap;
     }
 
     public static void documentImplementation(String userID, Context context){
-        DocumentReference docRef = getDocRef(userID);
-        writePrefFromDoc(context, docRef);
+        writePrefFromDoc(context, getDocRef(userID));
     }
 
     private static void writePrefFromDoc(Context context, DocumentReference docRef) {
-        // this function waits until fetching data is complete, then writes changes to sharedPrefs
-        // which is in the completeListener , which then fires the sharedPref onChangeListener
+        /*
+           this function waits until fetching data is complete, then writes changes to sharedPrefs
+           which is in the completeListener , which then fires the sharedPref onChangeListener
+        */
+
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
-                Log.d(TAG, "Cached document data: " + document.getData());
-                Map<String,Object> myMap = document.getData();
-                assert myMap != null;
-                SpUtil.writeStringPref(context,SpUtil.USER_NAME, Objects.requireNonNull(myMap.get("username")).toString());
-                SpUtil.writeStringPref(context,SpUtil.USER_PHONE, Objects.requireNonNull(myMap.get("userphone")).toString());
-                SpUtil.writeStringPref(context,SpUtil.USER_PHOTO, Objects.requireNonNull(myMap.get("userphoto")).toString());
-                SpUtil.writeStringPref(context,SpUtil.USER_EMAIL, Objects.requireNonNull(myMap.get("useremail")).toString());
 
+                Log.d(TAG, "Cached document data: " + document.getData());
+
+                Map<String,Object> userMap = document.getData();
+
+                assert userMap != null;
+
+                writeToSharedPreferences(context, userMap);
             } else {
                 Log.d(TAG, "Cached get failed: ", task.getException());
             }
         });
     }
 
-    @NonNull
-    private static DocumentReference getDocRef(String userID) {
-        FirebaseFirestore mDb;
-        mUser = "User-"+ userID;
-        mDb = FirebaseFirestore.getInstance();
-        return mDb.collection(USERS).document(mUser);
+    private static void writeToSharedPreferences(Context context, Map<String, Object> map) {
+        SpUtil.writeStringPref(context,SpUtil.USER_NAME, Objects.requireNonNull(map.get(USERNAME)).toString());
+        SpUtil.writeStringPref(context,SpUtil.USER_PHONE, Objects.requireNonNull(map.get(USERPHONE)).toString());
+        SpUtil.writeStringPref(context,SpUtil.USER_PHOTO, Objects.requireNonNull(map.get(PHOTO_URL)).toString());
+        SpUtil.writeStringPref(context,SpUtil.USER_EMAIL, Objects.requireNonNull(map.get(USEREMAIL)).toString());
     }
 
+    @NonNull
+    private static DocumentReference getDocRef(String userID) {
+        mUserHashDocument = "User-"+ userID;
+        return mDb.collection(USERS).document(mUserHashDocument);
+    }
 
 }
