@@ -77,7 +77,7 @@ public class DrawerActivity extends AppCompatActivity {
     private void initializeComponents() {
         View header = mNavigationView.getHeaderView(0);
         mDrawerImageView = header.findViewById(R.id.nav_header_profile);
-        mUserNameText = header.findViewById(R.id.tvUserName);
+        mUserNameText = header.findViewById(R.id.travel_from);
         mUserEmailText = header.findViewById(R.id.tvUserEmail);
         mPrefs = SpUtil.getPref(this);
         mIntent = getIntent(); // null if from SplashActivity
