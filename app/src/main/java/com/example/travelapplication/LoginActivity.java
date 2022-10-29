@@ -1,6 +1,12 @@
 package com.example.travelapplication;
 
 
+import static com.example.travelapplication.SignUpActivity.PHOTO_URL;
+import static com.example.travelapplication.SignUpActivity.USEREMAIL;
+import static com.example.travelapplication.SignUpActivity.USERNAME;
+import static com.example.travelapplication.SignUpActivity.USERPHONE;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,10 +19,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Objects;
 
@@ -94,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                         authSuccessLogMessage(task);
 
                         //fetch data to update sharedPrefs
-                        FireStoreUtil.documentImplementation(mUserId,getApplicationContext());
+                        FireStoreUtil.documentImplementation(mUserId);
 
                         makeToast("Authentication success.");
 
@@ -109,10 +117,30 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToDrawerActivity() {
-        mIntent = new Intent(LoginActivity.this, DrawerActivity.class);
-        mIntent.putExtra(STARTER_ACTIVITY,"LoginActivity");
-        startActivity(mIntent);
-        finish();
+        ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Logging in...");
+        pd.show();
+        FireStoreUtil.documentImplementation(mUserId).addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                DocumentSnapshot doc = task.getResult();
+                if (doc.exists()) {
+                    mIntent = new Intent(LoginActivity.this, DrawerActivity.class);
+                    mIntent.putExtra(SignUpActivity.USERNAME, Objects.requireNonNull(Objects.requireNonNull(doc.getData()).get("username")).toString());
+                    mIntent.putExtra(SignUpActivity.USEREMAIL, Objects.requireNonNull(Objects.requireNonNull(doc.getData()).get("useremail")).toString());
+                    mIntent.putExtra(SignUpActivity.PHOTO_URL, Objects.requireNonNull(Objects.requireNonNull(doc.getData()).get("userphoto")).toString());
+                    pd.dismiss();
+                    startActivity(mIntent);
+                    finish();
+                } else {
+                    Log.d(TAG, "No such document");
+                }
+            } else {
+                Log.d(TAG, "get failed with ", task.getException());
+            }
+
+
+        });
+
     }
 
     private void authFailedLogMessage(Task<AuthResult> task) {

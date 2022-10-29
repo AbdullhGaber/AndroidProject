@@ -40,7 +40,6 @@ public class DrawerActivity extends AppCompatActivity {
     private String mSharedPhotoString;
     private String mSharedUserNameString;
     private String mSharedEmailString;
-    private String mSharedUserPhoneString;
     private String mUserID;
 
 
@@ -70,7 +69,6 @@ public class DrawerActivity extends AppCompatActivity {
 
 
         initializeComponents();
-        mPrefs.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> setComponentsValues());
         setComponentsValues();
     }
 
@@ -85,54 +83,19 @@ public class DrawerActivity extends AppCompatActivity {
     }
 
     private void setComponentsValues() {
-        // Checking the firing activity of the intent to do actions based on it
-        if(mIntent.getStringExtra(SignUpActivity.STARTER_ACTIVITY).equals("SignUpActivity")){
-
-            /*
-             if we sign up user for first time we will add data to DB
-             and we get them from the intent as we put it there
-            */
-
-            getIntentValues();
-
-            FireStoreUtil.addDocumentToUserCollection
-                    (
-                            mSharedUserNameString,
-                            mSharedUserPhoneString,
-                            mUserID,
-                            mSharedPhotoString,
-                            mSharedEmailString,
-                            null
-                    );
-        }
-        else{
-            /*
-                if any activity has data-less intent like login or splash
-                we will get the already registered shared prefs
-            */
-
-            getPreferenceValues();
-        }
-
-        //this will happen in any case
-        new FetchImage(mSharedPhotoString, mDrawerImageView , getApplicationContext()).start();
-        mUserNameText.setText(mSharedUserNameString);
+        getIntentValues();
         mUserEmailText.setText(mSharedEmailString);
+        mUserNameText.setText(mSharedUserNameString);
+        new FetchImage(mSharedPhotoString,mDrawerImageView,this).start();
     }
 
     private void getIntentValues() {
         mSharedPhotoString = mIntent.getStringExtra(SignUpActivity.PHOTO_URL);
         mSharedUserNameString = mIntent.getStringExtra(SignUpActivity.USERNAME);
         mSharedEmailString = mIntent.getStringExtra(SignUpActivity.USEREMAIL);
-        mSharedUserPhoneString = mIntent.getStringExtra(SignUpActivity.USERPHONE);
     }
 
-    private void getPreferenceValues() {
-        mSharedPhotoString = SpUtil.getPreferenceString(this,SpUtil.USER_PHOTO);
-        mSharedUserNameString = SpUtil.getPreferenceString(this,SpUtil.USER_NAME);
-        mSharedEmailString = SpUtil.getPreferenceString(this,SpUtil.USER_EMAIL);
-        mSharedUserPhoneString = SpUtil.getPreferenceString(this,SpUtil.USER_PHONE);
-    }
+
 
     public void signOut(MenuItem item) {
         FirebaseAuth.getInstance().signOut();

@@ -273,7 +273,6 @@ public class SignUpActivity extends AppCompatActivity {
         mIntent.putExtra(USERNAME, mUser);
         mIntent.putExtra(USEREMAIL, mEmail);
         mIntent.putExtra(USERPHONE, mPhone);
-        mIntent.putExtra(STARTER_ACTIVITY, "SignUpActivity");
         startActivity(mIntent);
         finish();
     }

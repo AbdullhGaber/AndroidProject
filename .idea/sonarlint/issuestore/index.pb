@@ -17,5 +17,7 @@ Mapp/src/main/java/com/example/travelapplication/ui/home/UpcomingFragment.java,
 Kapp/src/main/java/com/example/travelapplication/ForgotPasswordActivity.java,1\3\13328088c182121dd9b2efc43125b6dbdbca8372
 k
 ;app/src/main/java/com/example/travelapplication/SpUtil.java,3\6\36ebe0e988db36970534168c2c3498e61366a8d0
-o
-?app/src/main/java/com/example/travelapplication/FetchImage.java,e\d\ed80e8d15c73bd1321133f5a4a9939c5cda48cb2
+@
+app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
+i
+9app/src/main/java/com/example/travelapplication/Trip.java,9\6\969f32f9404765a65606d893600c581bd7d606c9

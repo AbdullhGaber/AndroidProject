@@ -2,10 +2,10 @@ package com.example.travelapplication;
 
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -126,31 +126,16 @@ public class FireStoreUtil {
         return userDataMap;
     }
 
-    public static void documentImplementation(String userID, Context context) {
-        writePrefFromDoc(context, getDocRef(userID));
+    public static Task<DocumentSnapshot> documentImplementation(String userID) {
+        return writePrefFromDoc( getDocRef(userID));
     }
 
-    private static void writePrefFromDoc(Context context, DocumentReference docRef) {
+    private static Task<DocumentSnapshot> writePrefFromDoc(DocumentReference docRef) {
         /*
            this function waits until fetching data is complete, then writes changes to sharedPrefs
            which is in the completeListener , which then fires the sharedPref onChangeListener
         */
-
-        docRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-
-                Log.d(TAG, "Cached document data: " + document.getData());
-
-                Map<String, Object> userMap = document.getData();
-
-                assert userMap != null;
-
-                writeToSharedPreferences(context, userMap);
-            } else {
-                Log.d(TAG, "Cached get failed: ", task.getException());
-            }
-        });
+        return docRef.get();
     }
 
     private static void writeToSharedPreferences(Context context, Map<String, Object> map) {

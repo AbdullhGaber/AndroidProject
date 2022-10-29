@@ -37,7 +37,6 @@ public class SplashActivity extends AppCompatActivity {
             else{
                 mIntent = new Intent(SplashActivity.this, DrawerActivity.class);
             }
-            mIntent.putExtra("starterActivity","SplashScreen");
             startActivity(mIntent);
             finish();
 
